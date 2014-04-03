@@ -13,6 +13,181 @@
 }
 </style>
 <script type = "text/javascript">
+var platform="unknown";
+var defaultPersistenceObject={"music":"on"};
+var persistenceObject=defaultPersistenceObject;
+var persistenceKeys=Object.keys(persistenceObject);
+
+function init(){
+  defineRefs();
+  var wLoc=""+window.location+"";
+  if(wLoc.indexOf("file:///")==0){
+    if(wLoc.indexOf("file:///var/mobile")==0){platform="dreamfreeze";}
+    else{platform="local";}
+    }
+  if(wLoc.indexOf("http://")==0){platform="web";}
+  dbuga("platform: "+platform);
+  initPersistence();
+  prepareWaveData(100*150);
+  sizeInterval=window.setInterval('screenTick()', 1000);
+  setGeometry();
+  initSound();
+  initGame();
+  }
+
+function initPersistence(){
+  if(platform=="dreamfreeze"){
+    requestLoadPersistenceData();
+    }
+  else{// pc and droid use localStorage
+    for (var k=0; k<persistenceKeys.length; k++){
+      var thisKey=persistenceKeys[k];
+      if (localStorage.getItem(thisKey) === null) {
+        // new key, save default value
+        localStorage.setItem(thisKey, persistenceObject[thisKey]);
+        }
+      else{
+        persistenceObject[thisKey]=localStorage.getItem(thisKey);
+        // test and fix number stored as string
+        }
+      }
+    }
+  }
+function setPersistence(){
+  if(platform=="dreamfreeze"){
+    requestSavePersistenceData();
+    }
+  else{
+    savePersistenceDataLocal();
+    }
+  }
+function savePersistenceDataLocal(){
+  for (var k=0; k<persistenceKeys.length; k++){
+    var thisKey=persistenceKeys[k];
+    localStorage.setItem(thisKey, persistenceObject[thisKey]);
+    }
+  }
+function updateMusicState(){
+  dbug("music:"+persistenceObject.music);
+  }
+
+function loadPersistenceData(theData){
+  dbuga('app called loadPersistenceData()');
+  if(theData == ""){
+    dbuga('<br>theData is empty so requestSavePersistenceData()');
+    requestSavePersistenceData();
+    }
+  else{
+    var incomingPersistenceObject = eval('(' + theData + ')');
+    var newProperties=false;
+    for (var k=0; k<persistenceKeys.length; k++){
+      var thisKey=persistenceKeys[k];
+      // only set persistence object properties if incoming had them
+      if(incomingPersistenceObject.hasOwnProperty(thisKey)){
+        persistenceObject[thisKey]=newPersistenceObject[thisKey];
+        }
+      else{
+        newProperties=true;
+        }
+      }
+    if(newProperties){
+      dbuga("ynewProperties so requestSavePersistenceData()");
+      requestSavePersistenceData();
+      }
+    }
+  return true;
+  }
+
+
+function initSound(){
+  //comQueue.push("action=manageSound|channel=0|mode=prepare|file=sounds/measure_loop_inst.mp3|loop=true");
+  //comTick();
+  }
+function genericDefault(itemName, defaultValue){
+  if(platform=="android"){
+    if (localStorage.getItem(itemName) === null) {
+      localStorage.setItem(itemName, defaultValue);
+      }
+    }
+  }
+function genericSet(itemName, newValue){
+  if(platform=="android"){
+    localStorage.setItem(itemName, defaultValue);
+    }
+  }
+function genericGet(itemName){
+  var value="notSet";
+  if(platform=="android"){
+    value=localStorage.getItem(itemName);
+    }
+  return value;
+  }
+
+function transmitBgMusicState(){
+  if(musicOn == true){
+    comQueue.push("action=manageSound|channel=0|mode=play");
+    }
+  else{
+    comQueue.push("action=manageSound|channel=0|mode=pause");
+    }
+  comTick();
+  }
+
+var soundChannel=2;
+function playSound(theSound){
+  //dbug(sfxOn);
+  if((sfxOn == true)&&(paused==false)){
+    soundChannel=0;
+    if(theSound=="laytrack"){soundChannel=1;}
+    if(theSound=="carstart"){soundChannel=2;}
+    if(theSound=="carstop"){soundChannel=3;}
+    if(theSound=="trainstart"){soundChannel=4;}
+    if(theSound=="trainpause"){soundChannel=5;}
+    if(theSound=="applause"){soundChannel=6;}
+    
+    if(soundChannel != 0){
+      comQueue.push("action=manageSound|channel="+soundChannel+"|mode=play");
+      comTick();
+      }
+    }
+  }
+
+function requestLoadPersistenceData(){
+  //dbuga('requestLoadPersistenceData()');
+  comQueue.push("action=loadPersistenceData");
+  comTick();
+  }
+
+
+
+
+
+// ios shell browser interface and persistenceData
+var comQueue=new Array();
+function comTick(){
+  if(comQueue.length >0){
+    var thisCom=comQueue.join('&');
+    //dbuga(thisCom);
+    comQueue=new Array();
+    pea=rnd(10000);
+    window.location.hash="#"+thisCom+"&unique="+pea;
+    }
+  comQueue=new Array();
+  }
+function requestSavePersistenceData(){
+  //dbug4('requestSavePersistenceData()');
+  comQueue.push("action=savePersistenceData");
+  comTick();
+  }
+function savePersistenceData(){
+  //dbug4('<br>app called savePersistenceData()');
+  json=JSON.stringify(persistenceObject);
+  return json;
+  }
+
+
+
+
 var sizeInterval;
 var gridUnits=160;
 var frameSize=110;
@@ -181,13 +356,6 @@ function square(w){
 var dctx;
 var dcanv;
 
-function init(){ 
-  prepareWaveData(100*150);
-  sizeInterval=window.setInterval('screenTick()', 1000);
-  defineRefs();
-  setGeometry();
-  initGame();
-  }
 var crouching=false;
 var startX=0;
 var spawnProg=1;// complete
@@ -202,6 +370,7 @@ var finalScore=0;
 var finalItem=0;
 
 function initGame(){
+  //dbug('TOUCH to crouch.<br>HOLD to stay low.<br>RELEASE to jump.<br>Jump over bombs for points.<br>Collect bytecoins to add lads.<br>TAP score to buy a bytecoin for 10,000.');
   finalCoins=0;
   finalLads=0;
   finalScore=0;
@@ -214,7 +383,6 @@ function initGame(){
   score=0;
   bank=0;
   exploding=false;
-  dbug('TOUCH to crouch.<br>HOLD to stay low.<br>RELEASE to jump.<br>Jump over bombs for points.<br>Collect bytecoins to add lads.<br>TAP score to buy a bytecoin for 10,000.');
   sdiv.innerHTML="0";
   catchingUp=0;
   exploded=[];
@@ -803,6 +971,15 @@ function animTick(){
     dctx.arc(progX, progY,grid*4, 0, pi*2,true);
     dctx.stroke();
     }
+
+  dctx.fillStyle="white";
+  dctx.font=(grid*4)+"px sack";
+  dctx.textAlign= "center";    
+  dctx.textBaseline= "middle";  
+  dctx.fillText("Music", grid*16, boardHeight-grid*20);
+  dctx.fillText(persistenceObject.music, grid*16, boardHeight-grid*12);
+  dctx.fillText(navigator.platform, grid*16, boardHeight-grid*26);
+
   var nowDate=new Date();
   var nowMs=nowDate.getTime();
   var deltaMs=nowMs-prevMs;
@@ -812,7 +989,6 @@ function animTick(){
   //dbug(useMs);
   animTimeout=window.setTimeout("animTick()", useMs);
 
-  //dbug(drawStack.length);
   //(bodyAngle);
   }
 
@@ -1004,6 +1180,18 @@ function tryToBuy(x,y){
       }
     }
   }
+function tryToMute(x,y){
+  if((x<grid*32)&&(y>boardHeight-grid*32)){
+    if(persistenceObject.music=="on"){
+      persistenceObject.music="off";
+      }
+    else{
+      persistenceObject.music="on";
+      }
+    setPersistence();
+    updateMusicState();
+    }
+  }
 
 var bank=0;
 var score=0;
@@ -1101,6 +1289,7 @@ function touchStart(event){
   if(ignoreTap==false){
     dbug('');
     tryToBuy(event.touches[0].pageX,event.touches[0].pageY);
+    tryToMute(event.touches[0].pageX,event.touches[0].pageY);
     crouching=true;
     if(ladCount<1){initGame();}
     }
@@ -1137,6 +1326,7 @@ function mouseDown(e){
   if(ignoreTap==false){
     dbug('');
     tryToBuy(e.pageX,e.pageY);
+    tryToMute(e.pageX,e.pageY);
     crouching=true;
     if(ladCount<1){initGame();}
     }
