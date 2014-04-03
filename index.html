@@ -27,6 +27,7 @@ function init(){
     }
   if(wLoc.indexOf("http://")==0){platform="web";}
   dbuga("platform: "+platform);
+  dbuga("window.location: "+window.location);
   initPersistence();
   prepareWaveData(100*150);
   sizeInterval=window.setInterval('screenTick()', 1000);
