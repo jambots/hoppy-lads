@@ -175,8 +175,11 @@ function loopStart(soundName){
   if(persistenceObject.music=="on"){
 
     if(platform=="android"){
-      dbuga('loopStart');
+      dbuga('BOOYA!');
+      if(soundRefByName.hasOwnProperty(soundName)){
+        soundRefByName[soundName].play();
       }
+    }
     if((platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
@@ -221,6 +224,7 @@ function statusCallback(theStatus){
         function (position) {
             if (position > -1) {
                 dbuga((position) + " sec");
+            if((theStatus==4)&&(position<.01)){loopStart("musicloop");}//loop
             }
         },
         // error callback
@@ -324,7 +328,12 @@ function oneShotLoad(soundName){
   }
 function loopStop(soundName){
   if(platform=="android"){
-    dbuga('loopStop');
+    dbuga('ANDROID loopStop');
+    if(soundRefByName.hasOwnProperty(soundName)){
+      dbuga('extant '+soundName);
+      dbuga('stop andriod');
+      soundRefByName[soundName].stop();
+      }  
     }
   if((platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
