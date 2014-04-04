@@ -22,7 +22,7 @@ var platform="unknown";
 var defaultPersistenceObject={"music":"off"};
 var persistenceObject=defaultPersistenceObject;
 var persistenceKeys=Object.keys(persistenceObject);
-
+var filePath="";
 function init(){
   defineRefs();
   var wLoc=""+window.location+"";
@@ -32,6 +32,11 @@ function init(){
     if(wLoc.indexOf("file:///android_asset")==0){platform="android";}
     }
   if(wLoc.indexOf("http://")==0){platform="web";}
+    var path = window.location.pathname;
+    path = path.substr( path, path.length - 10 );
+    filePath= 'file://' + path;
+    if(platform=="local"){filePath="sounds";}   
+  dbuga("filePath: "+filePath);
   dbuga("platform: "+platform);
   dbuga("window.location: "+window.location);
   initPersistence();
@@ -123,10 +128,6 @@ function initSound(){
 
   //should already have localStorage into persistenceObject
   //maybe not dreamfreeze though
-
-  // try
-  //comQueue.push("action=manageSound|channel=0|mode=prepare|file=sounds/measure_loop_inst.mp3|loop=true");
-  //comTick();
   }
 var soundRefByName={};
 function oneShot(soundName){
@@ -144,7 +145,7 @@ function oneShot(soundName){
         }
       else{
         var newSound = new Howl({
-          urls: ["sounds/"+soundName+".mp3"],
+          urls: [filePath+"/"+soundName+".mp3"],
           autoplay: true,
           loop: false,
           volume: 0.5,
@@ -182,7 +183,7 @@ function loopStart(soundName){
         }
       else{
         var newSound = new Howl({
-          urls: ["sounds/"+soundName+".mp3"],
+          urls: [filePath+"/"+soundName+".mp3"],
           autoplay: true,
           loop: true,
           volume: 0.5,
@@ -217,7 +218,7 @@ function loopLoad(soundName){
     else{
       dbuga(' - new Howl: '+ soundName);
       var newSound = new Howl({
-        urls: ["sounds/"+soundName+".mp3"],
+        urls: [filePath+"/"+soundName+".mp3"],
         autoplay: false,
         loop: true,
         volume: 0.5,
@@ -254,7 +255,7 @@ function oneShotLoad(soundName){
     else{
       dbuga('new howl');
       var newSound = new Howl({
-        urls: ["sounds/"+soundName+".mp3"],
+        urls: [filePath+"/"+soundName+".mp3"],
         autoplay: false,
         loop: false,
         volume: 0.5,
@@ -569,7 +570,7 @@ var finalScore=0;
 var finalItem=0;
 
 function initGame(){
-  dbug('TOUCH to crouch.<br>HOLD to stay low.<br>RELEASE to jump.<br>COLLECT bytecoins to add lads.<br>TAP score to buy a coin for 10,000.');
+  //dbug('TOUCH to crouch.<br>HOLD to stay low.<br>RELEASE to jump.<br>COLLECT bytecoins to add lads.<br>TAP score to buy a coin for 10,000.');
   //dbuga('initGame()');
   finalCoins=0;
   finalLads=0;
