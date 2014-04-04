@@ -109,7 +109,7 @@ function loadPersistenceData(theData){
 var soundObject={};
 function initSound(){
   //dbuga('initSound()');
-  //if((platform=="web")||(platform=="local")||(platform=="dreamfreeze")){
+  //if((platform=="android")||(platform=="web")||(platform=="local")||(platform=="dreamfreeze")){
     loopLoad("musicloop");
     oneShotLoad("up0");
     oneShotLoad("up1");
@@ -136,7 +136,7 @@ function oneShot(soundName){
   //dbuga("oneShot("+soundName+")");
   if(persistenceObject.music=="on"){
 
-    if((platform=="web")||(platform=="local")){
+    if((platform=="android")||(platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
         //soundRefByName[soundName].stop();
@@ -171,7 +171,7 @@ function loopStart(soundName){
   //dbuga("loopStart("+soundName+")");
   if(persistenceObject.music=="on"){
 
-    if((platform=="web")||(platform=="local")){
+    if((platform=="android")||(platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
         soundRefByName[soundName].stop();
@@ -205,7 +205,7 @@ function loopStart(soundName){
     }  
   }
 function loopLoad(soundName){
-  if((platform=="web")||(platform=="local")){
+  if((platform=="android")||(platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
       }
     else{
@@ -237,7 +237,7 @@ function loopLoad(soundName){
   }
 var soundCount=0;
 function oneShotLoad(soundName){
-  if((platform=="web")||(platform=="local")){
+  if((platform=="android")||(platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
       }
     else{
@@ -268,7 +268,7 @@ function oneShotLoad(soundName){
     }
   }
 function loopStop(soundName){
-  if((platform=="web")||(platform=="local")){
+  if((platform=="android")||(platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga('extant '+soundName);
       //dbuga('stop howl');
