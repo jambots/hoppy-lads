@@ -32,9 +32,10 @@ function init(){
     if(wLoc.indexOf("file:///android_asset")==0){platform="android";}
     }
   if(wLoc.indexOf("http://")==0){platform="web";}
+    //should be good for android and iOS
     var path = window.location.pathname;
     path = path.substr( path, path.length - 10 );
-    filePath= 'file://' + path;
+    filePath= 'file://' + path+'/sounds';
     if(platform=="local"){filePath="sounds";}   
   dbuga("filePath: "+filePath);
   dbuga("platform: "+platform);
