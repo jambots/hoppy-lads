@@ -27,8 +27,9 @@ function init(){
   defineRefs();
   var wLoc=""+window.location+"";
   if(wLoc.indexOf("file:///")==0){
+    platform="local";
     if(wLoc.indexOf("file:///var/mobile")==0){platform="dreamfreeze";}
-    else{platform="local";}
+    if(wLoc.indexOf("file:///android_asset")==0){platform="android";}
     }
   if(wLoc.indexOf("http://")==0){platform="web";}
   dbuga("platform: "+platform);
@@ -134,7 +135,7 @@ function oneShot(soundName){
     if(platform=="android"){
       dbuga('oneShot');
       }
-    if((platform=="web")||(platform=="local")){
+    if((platform=="android")||(platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
         //soundRefByName[soundName].stop();
@@ -172,7 +173,7 @@ function loopStart(soundName){
     if(platform=="android"){
       dbuga('loopStart');
       }
-    if((platform=="web")||(platform=="local")){
+    if((platform=="android")||(platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
         soundRefByName[soundName].stop();
@@ -206,13 +207,15 @@ function loopStart(soundName){
     }  
   }
 function loopLoad(soundName){
-    if(platform=="android"){
-      dbuga('');
-      }
-    if((platform=="web")||(platform=="local")){
+  if(platform=="android"){
+    dbuga('loopLoad');
+    }
+  if((platform=="android")||(platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
+      dbuga(' - extant: '+ soundName);
       }
     else{
+      dbuga(' - new Howl: '+ soundName);
       var newSound = new Howl({
         urls: ["sounds/"+soundName+".mp3"],
         autoplay: false,
@@ -242,12 +245,14 @@ function loopLoad(soundName){
 var soundCount=0;
 function oneShotLoad(soundName){
   if(platform=="android"){
-    dbuga('');
+    dbuga('oneShotLoad' +soundName);
     }
-  if((platform=="web")||(platform=="local")){
+  if((platform=="android")||(platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
+      dbuga('extant');
       }
     else{
+      dbuga('new howl');
       var newSound = new Howl({
         urls: ["sounds/"+soundName+".mp3"],
         autoplay: false,
@@ -276,16 +281,16 @@ function oneShotLoad(soundName){
   }
 function loopStop(soundName){
   if(platform=="android"){
-    dbuga('');
+    dbuga('loopStop');
     }
-  if((platform=="web")||(platform=="local")){
+  if((platform=="android")||(platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
-      //dbuga('extant '+soundName);
-      //dbuga('stop howl');
+      dbuga('extant '+soundName);
+      dbuga('stop howl');
       soundRefByName[soundName].stop();
       }  
     else{
-      //dbuga('non-extant '+soundName);
+      dbuga('non-extant '+soundName);
       }
     }  
   if(platform=="dreamfreeze"){
