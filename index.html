@@ -138,6 +138,17 @@ function oneShot(soundName){
   //dbuga("oneShot("+soundName+")");
   if(persistenceObject.music=="on"){
     if(platform=="android"){
+      if(soundRefByName.hasOwnProperty(soundName)){
+        dbuga(' - extant '+soundName);
+        //soundRefByName[soundName].stop();
+        soundRefByName[soundName].play();
+        //dbuga(' - played');
+        }
+      else{
+        var newSound = new Media(filePath+"/"+soundName+".mp3");
+        soundRefByName[soundName]=newSound;
+        dbuga('new Media '+soundName);
+        }
       }
     if((platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
@@ -292,7 +303,9 @@ function loopLoad(soundName){
 var soundCount=0;
 function oneShotLoad(soundName){
   if(platform=="android"){
-    dbuga('oneShotLoad' +soundName);
+    var newSound = new Media(filePath+"/"+soundName+".mp3");
+    soundRefByName[soundName]=newSound;
+    dbuga('new Media '+soundName);
     }
   if((platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
