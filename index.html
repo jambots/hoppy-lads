@@ -214,12 +214,27 @@ function loopStart(soundName){
 function statusCallback(theStatus){
   var statusArray=['MEDIA_NONE', 'MEDIA_STARTING', 'MEDIA_RUNNING', 'MEDIA_PAUSED', 'MEDIA_STOPPED'];
   dbuga('media status '+statusArray[theStatus]);
+  if(soundRefByName.hasOwnProperty("musicloop")){
+    var loopRef=soundRefByName["musicloop"];
+    loopRef.getCurrentPosition(
+        // success callback
+        function (position) {
+            if (position > -1) {
+                dbuga((position) + " sec");
+            }
+        },
+        // error callback
+        function (e) {
+            dbuga("Error getting pos=" + e);
+        }
+    );
+    }
   }
 function errorCallback(er){
-  dbuga("media error "+JSON.stringify(er))
+  //dbuga("media error "+JSON.stringify(er))
   }
 function successCallback(evt){
-  dbuga("HEY " + JSON.stringify(evt));
+  //dbuga("HEY ": + JSON.stringify(evt));
   //singMedia.play();
   }
 
