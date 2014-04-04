@@ -40,9 +40,9 @@ function init(){
     filePath= '' + path+'sounds';
     if(platform=="local"){filePath="sounds";}   
     if(platform=="web"){filePath="sounds";}   
-  dbuga("filePath: "+filePath);
-  dbuga("platform: "+platform);
-  dbuga("window.location: "+window.location);
+  //dbuga("filePath: "+filePath);
+  //dbuga("platform: "+platform);
+  //dbuga("window.location: "+window.location);
   initPersistence();
   prepareWaveData(100*150);
   sizeInterval=window.setInterval('screenTick()', 1000);
@@ -139,7 +139,7 @@ function oneShot(soundName){
   if(persistenceObject.music=="on"){
     if(platform=="android"){
       if(soundRefByName.hasOwnProperty(soundName)){
-        dbuga(' - extant '+soundName);
+        //dbuga(' - extant '+soundName);
         //soundRefByName[soundName].stop();
         soundRefByName[soundName].play();
         //dbuga(' - played');
@@ -147,7 +147,7 @@ function oneShot(soundName){
       else{
         var newSound = new Media(filePath+"/"+soundName+".mp3");
         soundRefByName[soundName]=newSound;
-        dbuga('new Media '+soundName);
+        //dbuga('new Media '+soundName);
         }
       }
     if((platform=="web")||(platform=="local")){
@@ -186,7 +186,7 @@ function loopStart(soundName){
   if(persistenceObject.music=="on"){
 
     if(platform=="android"){
-      dbuga('BOOYA!');
+      //dbuga('BOOYA!');
       if(soundRefByName.hasOwnProperty(soundName)){
         soundRefByName[soundName].play();
       }
@@ -227,20 +227,20 @@ function loopStart(soundName){
 
 function statusCallback(theStatus){
   var statusArray=['MEDIA_NONE', 'MEDIA_STARTING', 'MEDIA_RUNNING', 'MEDIA_PAUSED', 'MEDIA_STOPPED'];
-  dbuga('media status '+statusArray[theStatus]);
+  //dbuga('media status '+statusArray[theStatus]);
   if(soundRefByName.hasOwnProperty("musicloop")){
     var loopRef=soundRefByName["musicloop"];
     loopRef.getCurrentPosition(
         // success callback
         function (position) {
             if (position > -1) {
-                dbuga((position) + " sec");
+                //dbuga((position) + " sec");
             if((ladCount>0)&&(theStatus==4)&&(position<.01)){loopStart("musicloop");}//loop hack for bullshit media
             }
         },
         // error callback
         function (e) {
-            dbuga("Error getting pos=" + e);
+            //dbuga("Error getting pos=" + e);
         }
     );
     }
@@ -257,7 +257,7 @@ function successCallback(evt){
 function loopLoad(soundName){
   if(platform=="android"){
     if(soundRefByName.hasOwnProperty(soundName)){
-      dbuga(' - extant '+soundName);
+      //dbuga(' - extant '+soundName);
       //soundRefByName[soundName].stop();
       soundRefByName[soundName].play();
       //dbuga(' - played');
@@ -265,15 +265,15 @@ function loopLoad(soundName){
     else{
       var newSound = new Media(filePath+"/"+soundName+".mp3", successCallback, errorCallback, statusCallback);
       soundRefByName[soundName]=newSound;
-      dbuga('new Media '+soundName);
+      //dbuga('new Media '+soundName);
       }
     }
   if((platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
-      dbuga(' - extant: '+ soundName);
+      //dbuga(' - extant: '+ soundName);
       }
     else{
-      dbuga(' - new Howl: '+ soundName);
+      //dbuga(' - new Howl: '+ soundName);
       var newSound = new Howl({
         urls: [filePath+"/"+soundName+".mp3"],
         autoplay: false,
@@ -305,14 +305,14 @@ function oneShotLoad(soundName){
   if(platform=="android"){
     var newSound = new Media(filePath+"/"+soundName+".mp3");
     soundRefByName[soundName]=newSound;
-    dbuga('new Media '+soundName);
+    //dbuga('new Media '+soundName);
     }
   if((platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
-      dbuga('extant');
+      //dbuga('extant');
       }
     else{
-      dbuga('new howl');
+      //dbuga('new howl');
       var newSound = new Howl({
         urls: [filePath+"/"+soundName+".mp3"],
         autoplay: false,
@@ -341,21 +341,21 @@ function oneShotLoad(soundName){
   }
 function loopStop(soundName){
   if(platform=="android"){
-    dbuga('ANDROID loopStop');
+    //dbuga('ANDROID loopStop');
     if(soundRefByName.hasOwnProperty(soundName)){
-      dbuga('extant '+soundName);
-      dbuga('stop andriod');
+      //dbuga('extant '+soundName);
+      //dbuga('stop andriod');
       soundRefByName[soundName].stop();
       }  
     }
   if((platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
-      dbuga('extant '+soundName);
-      dbuga('stop howl');
+      //dbuga('extant '+soundName);
+      //dbuga('stop howl');
       soundRefByName[soundName].stop();
       }  
     else{
-      dbuga('non-extant '+soundName);
+      //dbuga('non-extant '+soundName);
       }
     }  
   if(platform=="dreamfreeze"){
@@ -1053,13 +1053,13 @@ function animTick(){
         if(ladCount==0){
           loopStop("musicloop");
           oneShot("gameover");
-/*          
+
           dbug("GAME OVER");
           dbuga("Total Lads: "+finalLads);
           dbuga("Total Coins: "+finalCoins);
           dbuga("Total Points: "+finalScore);
           dbuga("Total Distance: "+finalItem);
-*/
+
           window.clearTimeout(ignoreTimeout);
           ignoreTap=true;
           ignoreTimeout=window.setTimeout("ignoreTick()", 2000);
