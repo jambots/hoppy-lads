@@ -35,7 +35,7 @@ function init(){
     //should be good for android and iOS
     var path = window.location.pathname;
     path = path.substr( path, path.length - 10 );
-    filePath= 'file://' + path+'/sounds';
+    filePath= 'file://' + path+'sounds';
     if(platform=="local"){filePath="sounds";}   
   dbuga("filePath: "+filePath);
   dbuga("platform: "+platform);
