@@ -136,7 +136,7 @@ function oneShot(soundName){
     if(platform=="android"){
       dbuga('oneShot');
       }
-    if((platform=="android")||(platform=="web")||(platform=="local")){
+    if((platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
         //soundRefByName[soundName].stop();
@@ -174,7 +174,7 @@ function loopStart(soundName){
     if(platform=="android"){
       dbuga('loopStart');
       }
-    if((platform=="android")||(platform=="web")||(platform=="local")){
+    if((platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
         //dbuga(' - extant '+soundName);
         soundRefByName[soundName].stop();
@@ -211,7 +211,7 @@ function loopLoad(soundName){
     if(platform=="android"){
       dbuga('');
       }
-    if((platform=="android")||(platform=="web")||(platform=="local")){
+    if((platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
       }
     else{
@@ -246,7 +246,7 @@ function oneShotLoad(soundName){
   if(platform=="android"){
     dbuga('');
     }
-  if((platform=="android")||(platform=="web")||(platform=="local")){
+  if((platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
       }
     else{
@@ -280,7 +280,7 @@ function loopStop(soundName){
   if(platform=="android"){
     dbuga('');
     }
-  if((platform=="android")||(platform=="web")||(platform=="local")){
+  if((platform=="web")||(platform=="local")){
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga('extant '+soundName);
       //dbuga('stop howl');
