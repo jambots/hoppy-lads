@@ -26,6 +26,7 @@ var persistenceObject=defaultPersistenceObject;
 var persistenceKeys=Object.keys(persistenceObject);
 
 function init(){
+dbuga('init');
   defineRefs();
   var wLoc=""+window.location+"";
   if(wLoc.indexOf("file:///")==0){
