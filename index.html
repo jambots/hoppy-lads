@@ -218,8 +218,8 @@ function statusCallback(theStatus){
 function errorCallback(er){
   dbuga("media error "+JSON.stringify(er))
   }
-function successCallback(){
-  dbuga('success');
+function successCallback(evt){
+  dbuga("HEY " JSON.stringify(evt));
   //singMedia.play();
   }
 
@@ -233,12 +233,7 @@ function loopLoad(soundName){
       //dbuga(' - played');
       }
     else{
-      var newSound = new Media(
-        filePath+"/"+soundName+".mp3", 
-        function(soundName){dbuga("SUCCESS "+soundName);}, 
-        errorCallback, 
-        statusCallback
-        );
+      var newSound = new Media(filePath+"/"+soundName+".mp3", successCallback, errorCallback, statusCallback);
       soundRefByName[soundName]=newSound;
       dbuga('new Media '+soundName);
       }
