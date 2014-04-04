@@ -24,7 +24,6 @@ var persistenceObject=defaultPersistenceObject;
 var persistenceKeys=Object.keys(persistenceObject);
 
 function init(){
-dbuga('init ');
   defineRefs();
   var wLoc=""+window.location+"";
   if(wLoc.indexOf("file:///")==0){
@@ -32,8 +31,8 @@ dbuga('init ');
     else{platform="local";}
     }
   if(wLoc.indexOf("http://")==0){platform="web";}
-  //dbuga("platform: "+platform);
-  //dbuga("window.location: "+window.location);
+  dbuga("platform: "+platform);
+  dbuga("window.location: "+window.location);
   initPersistence();
   prepareWaveData(100*150);
   sizeInterval=window.setInterval('screenTick()', 1000);
@@ -984,13 +983,13 @@ function animTick(){
         if(ladCount==0){
           loopStop("musicloop");
           oneShot("gameover");
-          
+/*          
           dbug("GAME OVER");
           dbuga("Total Lads: "+finalLads);
           dbuga("Total Coins: "+finalCoins);
           dbuga("Total Points: "+finalScore);
           dbuga("Total Distance: "+finalItem);
-          
+*/
           window.clearTimeout(ignoreTimeout);
           ignoreTap=true;
           ignoreTimeout=window.setTimeout("ignoreTick()", 2000);
