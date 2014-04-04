@@ -224,7 +224,7 @@ function statusCallback(theStatus){
         function (position) {
             if (position > -1) {
                 dbuga((position) + " sec");
-            if((theStatus==4)&&(position<.01)){loopStart("musicloop");}//loop
+            if((ladCount>0)&&(theStatus==4)&&(position<.01)){loopStart("musicloop");}//loop hack for bullshit media
             }
         },
         // error callback
