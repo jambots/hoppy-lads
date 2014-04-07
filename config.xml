@@ -15,9 +15,9 @@
     <activity android:launchMode="singleInstance" />
 </gap:config-file>
 <preference name="fullscreen" value="true" />
-<gap:splash src="splash.png" />
+<gap:splash src="splash960.png" />
 <gap:plugin name="org.apache.cordova.media" version="0.2.8" />
 <access origin="*" />
 
-<icon src="icon.png" />
+<icon src="icon512.png" />
 </widget>

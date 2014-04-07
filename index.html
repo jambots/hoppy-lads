@@ -5,7 +5,7 @@ xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 <meta http-equiv = "content-type" content = "application/xhtml+xml; charset = UTF-8" />
 <meta content = 'width = device-width, initial-scale = 1.0, maximum-scale = 1.0, user-scalable = 0' name = 'viewport' /><meta name = "viewport" content = "width = device-width, maximum-scale = 1.0, initial-scale = 1.0"><meta name = "apple-mobile-web-app-capable" content = "yes"><meta name = "title" content = "Hoppy Lads" /><meta name = "description" content = "Jumpy Physics Game by Jambots" />
-<meta property="og:image"  content="http://jambots.com/hoppylads/hoppylads.png" />
+<meta property="og:image"  content="http://jambots.com/hoppylads/square.png" />
 <title>Hoppy Lads</title>
 <script src="phonegap.js"></script>
 <link rel="image_src" href="http://jambots.com/hoppylads/thumb.png" />
@@ -22,6 +22,7 @@ backface-visibility:hidden;
 </style>
 <script type="text/javascript" src="howler.min.js"></script>
 <script type = "text/javascript">
+var openedWithStupidLoop=false;
 var platform="unknown";
 var defaultPersistenceObject={"music":"off"};
 var persistenceObject=defaultPersistenceObject;
@@ -184,21 +185,23 @@ function oneShot(soundName){
     }  
   }
 function loopStart(soundName){
-  //dbuga("loopStart("+soundName+")");
+  //dbuga("loopStart("+soundName+") "+platform);
   if(persistenceObject.music=="on"){
-
     if(platform=="android"){
       //dbuga('BOOYA!');
       if(soundRefByName.hasOwnProperty(soundName)){
         soundRefByName[soundName].play();
+        }
       }
-    }
     if((platform=="web")||(platform=="local")){
       if(soundRefByName.hasOwnProperty(soundName)){
-        //dbuga(' - extant '+soundName);
-        soundRefByName[soundName].stop();
-        soundRefByName[soundName].play();
-        //dbuga(' - played');
+        //dbuga('openedWithStupidLoop: '+ openedWithStupidLoop);
+        if(openedWithStupidLoop==false){
+          //dbuga(' - extant '+soundName);
+          soundRefByName[soundName].stop();
+          soundRefByName[soundName].play();
+          //dbuga(' - played');
+          }
         }
       else{
         var newSound = new Howl({
@@ -275,10 +278,15 @@ function loopLoad(soundName){
       //dbuga(' - extant: '+ soundName);
       }
     else{
+      var shallAutoplay=false;
+      if(persistenceObject.music=="on"){
+        shallAutoplay=true;
+        openedWithStupidLoop=true;
+        }
       //dbuga(' - new Howl: '+ soundName);
       var newSound = new Howl({
         urls: [filePath+"/"+soundName+".mp3"],
-        autoplay: false,
+        autoplay: shallAutoplay,
         loop: true,
         volume: 0.5,
         onend: function() {
@@ -351,6 +359,7 @@ function loopStop(soundName){
       }  
     }
   if((platform=="web")||(platform=="local")){
+    openedWithStupidLoop=false;
     if(soundRefByName.hasOwnProperty(soundName)){
       //dbuga('extant '+soundName);
       //dbuga('stop howl');
@@ -636,7 +645,7 @@ var finalScore=0;
 var finalItem=0;
 
 function initGame(){
-  //dbug('TOUCH to crouch.<br>HOLD to stay low.<br>RELEASE to jump.<br>COLLECT bytecoins to add lads.<br>TAP score to buy a coin for 10,000.');
+  dbug('TOUCH to crouch.<br>HOLD to stay low.<br>RELEASE to jump.<br><br>COLLECT bytecoins to add lads.<br>TAP score to buy a coin for $'+coinCost);
   //dbuga('initGame()');
   finalCoins=0;
   finalLads=0;
@@ -1250,7 +1259,8 @@ function animTick(){
     var progX=boardWidth-grid*(6+10*c);// target coin slots 
     var progY=grid*12;
 
-    dctx.strokeStyle="#888";
+    dctx.lineWidth=grid/2;
+    dctx.strokeStyle="#fff";
     dctx.beginPath();
     dctx.arc(progX, progY,grid*4, 0, pi*2,true);
     dctx.stroke();
@@ -1471,6 +1481,7 @@ function tryToggleMute(x,y){
     if(persistenceObject.music=="on"){
       persistenceObject.music="off";
       loopStop("musicloop");
+      openedWithStupidLoop=false;
       }
     else{
       persistenceObject.music="on";
@@ -1629,7 +1640,7 @@ onGestureChange="gestureChange(event)"
 onGestureEnd="gestureEnd(event)"
 style="background-color:#999;"
 >
-<canvas id = "drawCanvas" onMousedown="javascript:mouseDown(event);" onMouseup="javascript:mouseUp();"  width=100 height=100 style="display:block; Zbackground-color:rgba(0,0,255,.5); position:absolute; top:0px;"></canvas>
+<canvas id = "drawCanvas" onMousedown="javascript:mouseDown(event);" onMouseup="javascript:mouseUp();"  width=100 height=100 style="display:block; background-color:rgba(0,0,255,.5); position:absolute; top:0px;"></canvas>
 <div id="audioDiv" style="display:none;"></div>
 <div id = "debugDiv" onMousedown="javascript:mouseDown(event);" onMouseup="javascript:mouseUp();"  style="display:none; zbackground-color:rgba(255,255,255,.5); position:absolute; font-family:sack; color:white; top:0px;left:0px;"></div>
 <div id = "scoreDiv" onMousedown="javascript:mouseDown(event);" onMouseup="javascript:mouseUp();"  style="display:block; zbackground-color:rgba(255,255,255,.5); text-align:right; font-family:sack; color:white; position:absolute; top:0px;left:0px;">0234567890</div>
