@@ -14,7 +14,8 @@
 <gap:config-file platform="android" parent="/manifest/application">
     <activity android:launchMode="singleInstance" />
 </gap:config-file>
-<preference name="fullscreen" value="true" />
+<preference name="Fullscreen" value="true" />
+<preference name="Orientation" value="landscape" />
 <gap:splash src="splash960.png" />
 <gap:plugin name="org.apache.cordova.media" version="0.2.8" />
 <access origin="*" />
