@@ -7,7 +7,7 @@
         version   = "1.2">
 
     <!-- versionCode is optional and Android only -->
-<preference name="phonegap-version" value="3.5.1" />
+<preference name="phonegap-version" value="3.5.0" />
     <name>Hoppy Lads</name>
     <description>Jambots presents Hoppy Lads - a jumpy physics game.</description>
 <gap:platform name="android" />
