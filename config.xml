@@ -4,7 +4,7 @@
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.jambots.hoppy-lads"
         versionCode="1" 
-        version   = "1.2">
+        version   = "1.3">
 
     <!-- versionCode is optional and Android only -->
 <preference name="phonegap-version" value="3.5.0" />
@@ -15,6 +15,7 @@
     <activity android:launchMode="singleInstance" />
     <preference name="keeprunning" value="false"/>
 </gap:config-file>
+<preference name="permissions" value="none"/>
 <preference name="Fullscreen" value="true" />
 <preference name="Orientation" value="landscape" />
 <gap:splash src="splash960.png" />
